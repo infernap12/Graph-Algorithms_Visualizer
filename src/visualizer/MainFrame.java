@@ -8,6 +8,7 @@ public class MainFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
         this.setName("Graph-Algorithms Visualizer");
+        this.setTitle(this.getName());
 
         JPanel graph = new Graph();
         this.add(graph, BorderLayout.CENTER);
