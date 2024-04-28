@@ -5,9 +5,9 @@ import java.awt.*;
 
 public class Vertex extends JPanel {
     JLabel vertexLabel;
-    private int vertexId;
+    private String vertexId;
 
-    public Vertex(int vertexId) {
+    public Vertex(String vertexId) {
         this.vertexId = vertexId;
         this.setLayout(null);
         this.setName("Vertex " + vertexId);
