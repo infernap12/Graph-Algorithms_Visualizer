@@ -21,20 +21,24 @@ public class Graph extends JPanel {
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                String input = "";
+                String input;
                 while (true) {
-                    input = JOptionPane.showInputDialog(null, "Enter Vertex ID", "Enter Vertex ID", JOptionPane.PLAIN_MESSAGE);
+                    input = JOptionPane.showInputDialog(null, "Enter Vertex ID", "Vertex", JOptionPane.PLAIN_MESSAGE);
                     //cancel was pressed
                     if (input == null) {
-                        return;
+                        break;
                     }
-                    if (input.length() == 1) {
+                    if (input.length() == 1 && !input.isBlank()) {
+
                         Vertex vertex = new Vertex(input);
                         Graph.this.add(vertex);
-                        vertex.setBounds(e.getX(), e.getY(), Graph.VERTEX_WIDTH, Graph.VERTEX_HEIGHT);
+                        vertex.setBounds(e.getX() - (Graph.VERTEX_WIDTH / 2),
+                                e.getY() - (Graph.VERTEX_HEIGHT / 2),
+                                Graph.VERTEX_WIDTH,
+                                Graph.VERTEX_HEIGHT);
                         Graph.this.revalidate();
                         Graph.this.repaint();
-                        return;
+                        break;
                     }
                 }
 
