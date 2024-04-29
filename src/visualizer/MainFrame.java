@@ -2,6 +2,8 @@ package visualizer;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class MainFrame extends JFrame {
     public MainFrame() {
@@ -10,12 +12,53 @@ public class MainFrame extends JFrame {
         this.setName("Graph-Algorithms Visualizer");
         this.setTitle(this.getName());
 
-        JPanel graph = new Graph();
+        Graph graph = new Graph();
         this.add(graph, BorderLayout.CENTER);
+
+        JLabel toolStateLabel = new JLabel(graph.state.NAME);
+        toolStateLabel.setName("Mode");
+//        toolStateLabel.setForeground(Color.WHITE);
+        this.add(toolStateLabel, BorderLayout.SOUTH);
+
+        JMenuBar menuBar = new JMenuBar();
+        JMenu modeMenu = new JMenu("Mode");
+
+        JMenuItem vertexMenuItem = new JMenuItem("Add a Vertex");
+        vertexMenuItem.setName(vertexMenuItem.getText());
+
+        JMenuItem edgeMenuItem = new JMenuItem("Add an Edge");
+        edgeMenuItem.setName(edgeMenuItem.getText());
+
+        JMenuItem noneMenuItem = new JMenuItem("None");
+        noneMenuItem.setName(noneMenuItem.getText());
+
+        vertexMenuItem.addActionListener(e -> {
+            graph.state = Graph.ToolState.VERTEX_CREATION;
+            toolStateLabel.setText(graph.state.NAME);
+        });
+
+        edgeMenuItem.addActionListener(e -> {
+            graph.state = Graph.ToolState.EDGE_CREATION;
+            toolStateLabel.setText(graph.state.NAME);
+        });
+
+        noneMenuItem.addActionListener(e -> {
+            graph.state = Graph.ToolState.NONE;
+            toolStateLabel.setText(graph.state.NAME);
+        });
+
+        menuBar.add(modeMenu);
+        modeMenu.add(vertexMenuItem);
+        modeMenu.add(edgeMenuItem);
+        modeMenu.add(noneMenuItem);
+        this.setJMenuBar(menuBar);
+
 
         setSize(800, 600);
         setResizable(false);
         setVisible(true);
     }
+
+
 }
 
