@@ -21,6 +21,29 @@ public class MainFrame extends JFrame {
         this.add(toolStateLabel, BorderLayout.SOUTH);
 
         JMenuBar menuBar = new JMenuBar();
+
+        JMenu fileMenu = new JMenu("File");
+
+        JMenuItem newMenuItem = new JMenuItem("New");
+        newMenuItem.setName(newMenuItem.getText());
+        newMenuItem.addActionListener((ActionEvent e) -> {
+            graph.edges.clear();
+            graph.vertices.clear();
+            graph.removeAll();
+            graph.repaint();
+        });
+        fileMenu.add(newMenuItem);
+
+        JMenuItem exitMenuItem = new JMenuItem("Exit");
+        exitMenuItem.setName(exitMenuItem.getText());
+        exitMenuItem.addActionListener((ActionEvent e) -> {
+            System.exit(0);
+        });
+        fileMenu.add(exitMenuItem);
+        menuBar.add(fileMenu);
+
+
+
         JMenu modeMenu = new JMenu("Mode");
 
         JMenuItem vertexMenuItem = new JMenuItem("Add a Vertex");
@@ -28,6 +51,12 @@ public class MainFrame extends JFrame {
 
         JMenuItem edgeMenuItem = new JMenuItem("Add an Edge");
         edgeMenuItem.setName(edgeMenuItem.getText());
+
+        JMenuItem removeVertexMenuItem = new JMenuItem("Remove a Vertex");
+        removeVertexMenuItem.setName(removeVertexMenuItem.getText());
+
+        JMenuItem removeEdgeMenuItem = new JMenuItem("Remove an Edge");
+        removeEdgeMenuItem.setName(removeEdgeMenuItem.getText());
 
         JMenuItem noneMenuItem = new JMenuItem("None");
         noneMenuItem.setName(noneMenuItem.getText());
@@ -39,6 +68,15 @@ public class MainFrame extends JFrame {
 
         edgeMenuItem.addActionListener(e -> {
             graph.state = Graph.ToolState.EDGE_CREATION;
+            toolStateLabel.setText(graph.state.NAME);
+        });
+
+        removeVertexMenuItem.addActionListener(e -> {
+            graph.state = Graph.ToolState.VERTEX_DELETION;
+        });
+
+        removeEdgeMenuItem.addActionListener(e -> {
+            graph.state = Graph.ToolState.EDGE_DELETION;
             toolStateLabel.setText(graph.state.NAME);
         });
 

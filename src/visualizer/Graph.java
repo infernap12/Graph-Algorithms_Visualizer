@@ -13,8 +13,8 @@ public class Graph extends JPanel {
     private static final int VERTEX_WIDTH = 50;
 
     ToolState state = ToolState.VERTEX_CREATION;
-    private java.util.List<JPanel> vertices = new ArrayList<>();
-    List<Edge> edges = new ArrayList<Edge>();
+    List<JPanel> vertices = new ArrayList<>();
+    List<Edge> edges = new ArrayList<>();
     EdgeManufacturer edgeFabricator = new EdgeManufacturer();
 
     public Graph() {
@@ -63,6 +63,8 @@ public class Graph extends JPanel {
             int[] coords = edge.getLineCoords();
             System.out.println(Arrays.toString(coords));
             g.drawLine(coords[0], coords[1], coords[2], coords[3]);
+            g.setColor(Color.WHITE);
+            g.drawString(Integer.toString(edge.weight), coords[0] + (coords[2] - coords[0]) / 2, coords[1] + (coords[3] - coords[1]) / 2);
         }
 //        drawDebugVertices();
     }
