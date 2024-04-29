@@ -21,22 +21,27 @@ public class Vertex extends JPanel {
         System.out.println("vertexLabel = " + vertexLabel.getText());
         this.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
-                Vertex source = (Vertex) e.getSource();
                 System.out.println(this + " clicked");
-                Graph parentGraph = (Graph) source.getParent();
-                Graph.ToolState state = parentGraph.state;
-                if (state != Graph.ToolState.EDGE_CREATION) {
-                    return;
-                }
-                Edge edge = parentGraph.edgeFabricator.submit(Vertex.this);
-                if (edge != null) {
-                    System.out.println("adding our boy");
-                    parentGraph.add(edge);
-                    parentGraph.edges.add(edge);
-                    parentGraph.edges.add(edge.getCompliment());
-                    parentGraph.revalidate();
-                    parentGraph.repaint();
-                    parentGraph.edgeFabricator.clear();
+                Graph graph = (Graph) Vertex.this.getParent();
+                Graph.ToolState state = graph.state;
+                if (state == Graph.ToolState.EDGE_CREATION) {
+                    Edge edge = graph.edgeFabricator.submit(Vertex.this);
+                    if (edge != null) {
+                        System.out.println("adding our boy");
+                        graph.add(edge);
+                        graph.edges.add(edge);
+                        graph.edges.add(edge.getCompliment());
+                        graph.revalidate();
+                        graph.repaint();
+                        graph.edgeFabricator.clear();
+                    }
+
+                } else if (state == Graph.ToolState.VERTEX_DELETION) {
+                    graph.remove(Vertex.this);
+                    graph.vertices.remove(Vertex.this);
+                    graph.edges.removeIf(edge -> edge.v1 == Vertex.this || edge.v2 == Vertex.this);
+                    graph.revalidate();
+                    graph.repaint();
                 }
             }
         });

@@ -2,6 +2,8 @@ package visualizer;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class Edge extends JComponent {
     Vertex v1, v2;
@@ -15,6 +17,19 @@ public class Edge extends JComponent {
         this.setBounds((v1.getX() + v2.getX()) / 2, (v1.getY() + v2.getY()) / 2, Math.abs(v1.getX() - v2.getX()), Math.abs(v1.getY() - v2.getY()));
         edgeLabel = new JLabel(String.valueOf(weight));
         edgeLabel.setName("%s -> %s".formatted(v1.getVertexId(), v2.getVertexId()));
+        edgeLabel.setFont(edgeLabel.getFont().deriveFont(edgeLabel.getFont().getSize() * 1.5f));
+
+        this.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                Graph graph = (Graph) Edge.this.getParent();
+                if (graph.state != Graph.ToolState.EDGE_DELETION) {
+                    return;
+                }
+
+                graph.remove(Edge.this);
+                graph.repaint();
+            }
+        });
     }
 
     Edge getCompliment() {
