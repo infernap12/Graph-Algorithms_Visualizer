@@ -14,6 +14,7 @@ public class Edge extends JComponent {
         this.v1 = v1;
         this.v2 = v2;
         this.weight = weight;
+        System.out.println(weight);
         this.setBounds((v1.getX() + v2.getX()) / 2, (v1.getY() + v2.getY()) / 2, Math.abs(v1.getX() - v2.getX()), Math.abs(v1.getY() - v2.getY()));
         edgeLabel = new JLabel(String.valueOf(weight));
         edgeLabel.setName("%s -> %s".formatted(v1.getVertexId(), v2.getVertexId()));
@@ -22,7 +23,7 @@ public class Edge extends JComponent {
         this.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 Graph graph = (Graph) Edge.this.getParent();
-                if (graph.state != Graph.ToolState.EDGE_DELETION) {
+                if (graph.state != ToolState.EDGE_DELETION) {
                     return;
                 }
 

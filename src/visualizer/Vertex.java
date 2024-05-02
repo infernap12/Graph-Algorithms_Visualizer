@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Arrays;
+import java.util.concurrent.ExecutionException;
 
 public class Vertex extends JPanel {
     JLabel vertexLabel;
@@ -23,8 +25,8 @@ public class Vertex extends JPanel {
             public void mousePressed(MouseEvent e) {
                 System.out.println(this + " clicked");
                 Graph graph = (Graph) Vertex.this.getParent();
-                Graph.ToolState state = graph.state;
-                if (state == Graph.ToolState.EDGE_CREATION) {
+                ToolState state = graph.state;
+                if (state == ToolState.EDGE_CREATION) {
                     Edge edge = graph.edgeFabricator.submit(Vertex.this);
                     if (edge != null) {
                         System.out.println("adding our boy");
@@ -36,15 +38,34 @@ public class Vertex extends JPanel {
                         graph.edgeFabricator.clear();
                     }
 
-                } else if (state == Graph.ToolState.VERTEX_DELETION) {
+                } else if (state == ToolState.VERTEX_DELETION) {
                     graph.remove(Vertex.this);
                     graph.vertices.remove(Vertex.this);
                     graph.edges.removeIf(edge -> edge.v1 == Vertex.this || edge.v2 == Vertex.this);
                     graph.revalidate();
                     graph.repaint();
+                } else if (state == ToolState.NONE && graph.algorithm != null) {
+                    MainFrame frame = (MainFrame) graph.getParent();
+                    AlgorithmWorker worker = new AlgorithmWorker(Vertex.this, graph.algorithm, graph.edges, graph.vertices, frame.displayLabel);
+                    worker.execute();
+                    java.util.List<Vertex> list;
+                    try {
+                        list = worker.get();
+                    } catch (InterruptedException | ExecutionException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                    list.forEach(x -> System.out.println(x.vertexId));
                 }
             }
         });
+    }
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("Vertex{");
+        sb.append("vertexId='").append(vertexId).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 
     private void buildVertexLabel(String vertexId) {
@@ -70,4 +91,5 @@ public class Vertex extends JPanel {
     public String getVertexId() {
         return vertexId;
     }
+
 }
