@@ -36,7 +36,7 @@ public class EdgeManufacturer {
             v2 = vertex;
             System.out.println("Second vertex submitted");
             while (true) {
-                String input = JOptionPane.showInputDialog(null, "Enter Vertex ID", "Vertex", JOptionPane.PLAIN_MESSAGE);
+                String input = JOptionPane.showInputDialog(null, "Enter Edge Weight", "Edge", JOptionPane.PLAIN_MESSAGE);
                 //cancel was pressed
                 if (input == null) {
                     this.clear();
@@ -44,7 +44,7 @@ public class EdgeManufacturer {
                 }
                 if (input.matches("\\d+")) {
                     System.out.println("we get signal");
-                    return new Edge(v1, v2, weight);
+                    return new Edge(v1, v2, Integer.parseInt(input));
                 }
             }
         }

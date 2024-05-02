@@ -13,7 +13,9 @@ public class Graph extends JPanel {
     private static final int VERTEX_WIDTH = 50;
 
     ToolState state = ToolState.VERTEX_CREATION;
-    List<JPanel> vertices = new ArrayList<>();
+    Algorithm algorithm = null;
+
+    List<Vertex> vertices = new ArrayList<>();
     List<Edge> edges = new ArrayList<>();
     EdgeManufacturer edgeFabricator = new EdgeManufacturer();
 
@@ -22,32 +24,30 @@ public class Graph extends JPanel {
         this.setName("Graph");
         setLayout(null);
         this.setBackground(Color.BLACK);
-//        createDebugVertices();
 
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
-                if (Graph.this.state != ToolState.VERTEX_CREATION) {
-                    return;
-                }
-                String input;
-                while (true) {
-                    input = JOptionPane.showInputDialog(null, "Enter Vertex ID", "Vertex", JOptionPane.PLAIN_MESSAGE);
-                    //cancel was pressed
-                    if (input == null) {
-                        break;
-                    }
-                    if (input.length() == 1 && !input.isBlank()) {
+                if (Graph.this.state == ToolState.VERTEX_CREATION) {
 
-                        Vertex vertex = new Vertex(input);
-                        Graph.this.add(vertex);
-                        vertices.add(vertex);
-                        vertex.setBounds(e.getX() - (Graph.VERTEX_WIDTH / 2), e.getY() - (Graph.VERTEX_HEIGHT / 2), Graph.VERTEX_WIDTH, Graph.VERTEX_HEIGHT);
-                        Graph.this.revalidate();
-                        Graph.this.repaint();
-                        break;
-                    }
-                }
+                    String input;
+                    while (true) {
+                        input = JOptionPane.showInputDialog(null, "Enter Vertex ID", "Vertex", JOptionPane.PLAIN_MESSAGE);
+                        //cancel was pressed
+                        if (input == null) {
+                            break;
+                        }
+                        if (input.length() == 1 && !input.isBlank()) {
+
+                            Vertex vertex = new Vertex(input);
+                            Graph.this.add(vertex);
+                            vertices.add(vertex);
+                            vertex.setBounds(e.getX() - (Graph.VERTEX_WIDTH / 2), e.getY() - (Graph.VERTEX_HEIGHT / 2), Graph.VERTEX_WIDTH, Graph.VERTEX_HEIGHT);
+                            Graph.this.revalidate();
+                            Graph.this.repaint();
+                            break;
+                        }
+                    }}
 
 
             }
@@ -66,33 +66,5 @@ public class Graph extends JPanel {
             g.setColor(Color.WHITE);
             g.drawString(Integer.toString(edge.weight), coords[0] + (coords[2] - coords[0]) / 2, coords[1] + (coords[3] - coords[1]) / 2);
         }
-//        drawDebugVertices();
     }
-
-//    private void createDebugVertices() {
-//        vertices = new JPanel[4];
-//        for (int i = 0; i < 4; i++) {
-//            vertices[i] = new Vertex(String.valueOf(i));
-//            this.add(vertices[i]);
-//        }
-//    }
-
-    enum ToolState {
-        NONE("None"), EDGE_CREATION("Add an Edge"), EDGE_DELETION("Remove an Edge"), VERTEX_CREATION("Add a Vertex"), VERTEX_DELETION("Remove a Vertex");
-
-        final String NAME;
-
-        ToolState(String stateName) {
-            this.NAME = stateName;
-        }
-    }
-
-//    private void drawDebugVertices() {
-//        int width = Graph.VERTEX_WIDTH;
-//        int height = Graph.VERTEX_HEIGHT;
-//        vertices[0].setBounds(0, 0, width, height);
-//        vertices[1].setBounds(this.getWidth() - width, 0, width, height);
-//        vertices[2].setBounds(0, this.getHeight() - height, width, height);
-//        vertices[3].setBounds(this.getWidth() - width, this.getHeight() - height, width, height);
-//    }
 }
