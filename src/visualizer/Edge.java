@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class Edge extends JComponent {
+public class Edge extends JComponent implements Comparable<Edge> {
     Vertex v1, v2;
     int weight;
     JLabel edgeLabel;
@@ -50,5 +50,14 @@ public class Edge extends JComponent {
 
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
+    @Override
+    public int compareTo(Edge edge) {
+        return Integer.compare(this.getWeight(), edge.getWeight());
     }
 }
