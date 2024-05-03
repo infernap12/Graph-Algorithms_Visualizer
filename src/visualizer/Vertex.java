@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class Vertex extends JPanel {
@@ -45,10 +45,21 @@ public class Vertex extends JPanel {
                     graph.revalidate();
                     graph.repaint();
                 } else if (state == ToolState.NONE && graph.algorithm != null) {
-                    MainFrame frame = (MainFrame) graph.getParent();
-                    AlgorithmWorker worker = new AlgorithmWorker(Vertex.this, graph.algorithm, graph.edges, graph.vertices, frame.displayLabel);
+                    MainFrame frame = (MainFrame) graph.getParent().getParent().getParent().getParent();
+                    AbstractSearchWorker worker = null;
+                    switch (graph.algorithm) {
+                        case DFS -> {
+                            worker = new SearchWorkerDFS(Vertex.this, graph.vertices, graph.edges, frame.displayLabel);
+                        }
+                        case BFS -> {
+                            worker = new SearchWorkerBFS(Vertex.this, graph.vertices, graph.edges, frame.displayLabel);
+                        }
+                        case DIJKSTRA -> {
+                            worker = new SearchWorkerDIJ(Vertex.this,graph.vertices, graph.edges, frame.displayLabel);
+                        }
+                    }
                     worker.execute();
-                    java.util.List<Vertex> list;
+                    List<Vertex> list;
                     try {
                         list = worker.get();
                     } catch (InterruptedException | ExecutionException ex) {
