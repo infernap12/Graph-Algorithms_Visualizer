@@ -6,9 +6,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class Edge extends JComponent implements Comparable<Edge> {
-    Vertex v1, v2;
-    int weight;
-    JLabel edgeLabel;
+    final Vertex v1, v2;
+    final int weight;
+    final JLabel edgeLabel;
 
     public Edge(Vertex v1, Vertex v2, int weight) {
         this.v1 = v1;

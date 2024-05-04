@@ -47,7 +47,8 @@ public class Graph extends JPanel {
                             Graph.this.repaint();
                             break;
                         }
-                    }}
+                    }
+                }
 
 
             }

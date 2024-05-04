@@ -19,7 +19,7 @@ class SearchWorkerBFS extends AbstractSearchWorker {
     }
 
     @Override
-    protected String doInBackground() throws Exception {
+    protected String doInBackground() {
         bfs(startNode);
 
         return getSolutionString();

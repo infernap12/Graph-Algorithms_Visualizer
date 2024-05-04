@@ -4,8 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 public class Vertex extends JPanel {
     JLabel vertexLabel;
@@ -23,7 +21,7 @@ public class Vertex extends JPanel {
         System.out.println("vertexLabel = " + vertexLabel.getText());
         this.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
-                System.out.println(this + " clicked");
+                System.out.println(Vertex.this.getVertexId() + " clicked");
                 Graph graph = (Graph) Vertex.this.getParent();
                 ToolState state = graph.state;
                 if (state == ToolState.EDGE_CREATION) {
@@ -46,34 +44,19 @@ public class Vertex extends JPanel {
                     graph.repaint();
                 } else if (state == ToolState.NONE && graph.algorithm != null) {
                     MainFrame frame = (MainFrame) graph.getParent().getParent().getParent().getParent();
-                    AbstractSearchWorker worker = null;
-                    switch (graph.algorithm) {
-                        case DFS -> {
-                            worker = new SearchWorkerDFS(Vertex.this, graph.vertices, graph.edges, frame.displayLabel);
-                        }
-                        case BFS -> {
-                            worker = new SearchWorkerBFS(Vertex.this, graph.vertices, graph.edges, frame.displayLabel);
-                        }
-                        case DIJKSTRA -> {
-                            worker = new SearchWorkerDIJ(Vertex.this, graph.vertices, graph.edges, frame.displayLabel);
-                        }
-                        case PRIM -> {
-                            worker = new SearchWorkerPRIM(Vertex.this, graph.vertices, graph.edges, frame.displayLabel);
-                        }
-                        default -> throw new IllegalStateException("Unexpected value: " + graph.algorithm);
-                    }
+
+                    AbstractSearchWorker worker = SearchWorkerFactory.createSearchWorker(
+                            graph.algorithm,
+                            Vertex.this,
+                            graph.vertices,
+                            graph.edges,
+                            frame.displayLabel
+                    );
+
                     worker.execute();
                 }
             }
         });
-    }
-
-    @Override
-    public String toString() {
-        final StringBuffer sb = new StringBuffer("Vertex{");
-        sb.append("vertexId='").append(vertexId).append('\'');
-        sb.append('}');
-        return sb.toString();
     }
 
     private void buildVertexLabel(String vertexId) {
