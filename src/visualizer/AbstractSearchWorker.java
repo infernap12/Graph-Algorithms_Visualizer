@@ -3,12 +3,10 @@ package visualizer;
 import javax.swing.*;
 import java.util.*;
 
-public abstract class AbstractSearchWorker extends SwingWorker<List<Vertex>, Object> {
-    List<Vertex> vertices;
-    List<Edge> edges;
-    Set<Vertex> visited = new HashSet<>();
+public abstract class AbstractSearchWorker extends SwingWorker<String, Object> {
+    final List<Vertex> vertices;
+    final List<Edge> edges;
     JLabel statusLabel;
-    List<Vertex> solution = new LinkedList<>();
     Algorithm algorithm;
 
     public AbstractSearchWorker(List<Vertex> vertices, List<Edge> edges, JLabel statusLabel, Algorithm algorithm) {
@@ -18,19 +16,12 @@ public abstract class AbstractSearchWorker extends SwingWorker<List<Vertex>, Obj
         this.algorithm = algorithm;
     }
 
+    public abstract String getSolutionString();
+
     @Override
     protected void done() {
         if (statusLabel != null) {
-            StringBuilder sb = new StringBuilder();
-            sb.append(algorithm.toString()).append(" : ");
-            Iterator<Vertex> iterator = solution.iterator();
-            while (iterator.hasNext()) {
-                sb.append(iterator.next().getVertexId());
-                if (iterator.hasNext()) {
-                    sb.append(" -> ");
-                }
-            }
-            statusLabel.setText(sb.toString());
+            statusLabel.setText(this.getSolutionString());
         }
 
     }

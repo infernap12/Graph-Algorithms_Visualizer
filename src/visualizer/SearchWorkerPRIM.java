@@ -1,7 +1,5 @@
 package visualizer;
 
-import com.jogamp.common.nio.Buffers;
-
 import javax.swing.*;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -17,38 +15,17 @@ public class SearchWorkerPRIM extends AbstractSearchWorker {
         this.startNode = startNode;
     }
 
-    @Override
-    protected void done() {
-        statusLabel.setText(this.toString());
-    }
 
     @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder();
-        Iterator<Vertex> iterator = vertices.stream().filter(x -> x != startNode)
+    public String getSolutionString() {
+        return vertices.stream().filter(x -> x != startNode)
                 .sorted(Comparator.comparing(Vertex::getVertexId))
-                .iterator();
-
-//        String output = vertices.stream().filter(x -> x != startNode).sorted(Comparator.comparing(Vertex::getVertexId)).map(x -> x.getVertexId() + "=" + parents.get(x).getVertexId()).collect(Collectors.joining(", "));
-
-        while (iterator.hasNext()) {
-            Vertex vertex = iterator.next();
-            if (vertex == startNode) {
-                continue;
-            }
-            sb.append(vertex.getVertexId())
-                    .append("=")
-                    .append(parents.get(vertex).getVertexId());
-            if (iterator.hasNext()) {
-                sb.append(", ");
-            }
-        }
-
-        return sb.toString();
+                .map(x -> x.getVertexId() + "=" + parents.get(x).getVertexId())
+                .collect(Collectors.joining(", "));
     }
 
     @Override
-    protected List<Vertex> doInBackground() throws Exception {
+    protected String doInBackground() {
         for (Vertex vertex : vertices) {
             result.put(vertex, Integer.MAX_VALUE);
         }
@@ -74,9 +51,7 @@ public class SearchWorkerPRIM extends AbstractSearchWorker {
                 }
             }
         }
-        return solution;
+        return getSolutionString();
     }
-
-
 
 }

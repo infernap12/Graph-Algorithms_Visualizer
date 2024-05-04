@@ -1,12 +1,13 @@
 package visualizer;
 
 import javax.swing.*;
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 class SearchWorkerBFS extends AbstractSearchWorker {
     Vertex startNode;
+    Set<Vertex> visited = new HashSet<>();
+    List<Vertex> solution = new LinkedList<>();
 
     public SearchWorkerBFS(Vertex startNode,
                            List<Vertex> vertices,
@@ -18,10 +19,10 @@ class SearchWorkerBFS extends AbstractSearchWorker {
     }
 
     @Override
-    protected List<Vertex> doInBackground() throws Exception {
+    protected String doInBackground() throws Exception {
         bfs(startNode);
 
-        return solution;
+        return getSolutionString();
     }
 
     private void bfs(Vertex startNode) {
@@ -34,8 +35,9 @@ class SearchWorkerBFS extends AbstractSearchWorker {
             Vertex current = queue.poll();
             solution.add(current);
 
-            for (Edge edge : edges) {
-                if (edge.v1.equals(current) && !visited.contains(edge.v2)) {
+            List<Edge> adjacentEdges = edges.stream().filter(x -> x.v1 == current).sorted().toList();
+            for (Edge edge : adjacentEdges) {
+                if (!visited.contains(edge.v2)) {
                     queue.add(edge.v2);
                     visited.add(edge.v2);
                 }
@@ -43,4 +45,10 @@ class SearchWorkerBFS extends AbstractSearchWorker {
         }
     }
 
+    @Override
+    public String getSolutionString() {
+        return "BFS : " + solution.stream()
+                .map(Vertex::getVertexId)
+                .collect(Collectors.joining(" -> "));
+    }
 }

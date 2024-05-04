@@ -14,12 +14,7 @@ public class SearchWorkerDIJ extends AbstractSearchWorker {
     }
 
     @Override
-    protected void done() {
-        statusLabel.setText(this.toString());
-    }
-
-    @Override
-    public String toString() {
+    public String getSolutionString() {
         final StringBuilder sb = new StringBuilder();
         Iterator<Vertex> iterator = vertices.stream().sorted(Comparator.comparing(Vertex::getVertexId)).iterator();
 
@@ -40,7 +35,7 @@ public class SearchWorkerDIJ extends AbstractSearchWorker {
     }
 
     @Override
-    protected List<Vertex> doInBackground() throws Exception {
+    protected String doInBackground() {
         for (Vertex vertex : vertices) {
             result.put(vertex, Integer.MAX_VALUE);
         }
@@ -65,9 +60,7 @@ public class SearchWorkerDIJ extends AbstractSearchWorker {
                 }
             }
         }
-        return solution;
+        return getSolutionString();
     }
-
-
 
 }

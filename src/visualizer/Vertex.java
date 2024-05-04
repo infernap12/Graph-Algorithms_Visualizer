@@ -55,17 +55,14 @@ public class Vertex extends JPanel {
                             worker = new SearchWorkerBFS(Vertex.this, graph.vertices, graph.edges, frame.displayLabel);
                         }
                         case DIJKSTRA -> {
-                            worker = new SearchWorkerDIJ(Vertex.this,graph.vertices, graph.edges, frame.displayLabel);
+                            worker = new SearchWorkerDIJ(Vertex.this, graph.vertices, graph.edges, frame.displayLabel);
                         }
+                        case PRIM -> {
+                            worker = new SearchWorkerPRIM(Vertex.this, graph.vertices, graph.edges, frame.displayLabel);
+                        }
+                        default -> throw new IllegalStateException("Unexpected value: " + graph.algorithm);
                     }
                     worker.execute();
-                    List<Vertex> list;
-                    try {
-                        list = worker.get();
-                    } catch (InterruptedException | ExecutionException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                    list.forEach(x -> System.out.println(x.vertexId));
                 }
             }
         });

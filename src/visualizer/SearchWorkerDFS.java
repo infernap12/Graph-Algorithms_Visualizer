@@ -5,6 +5,8 @@ import java.util.*;
 
 class SearchWorkerDFS extends AbstractSearchWorker {
     Vertex startNode;
+    Set<Vertex> visited = new HashSet<>();
+    List<Vertex> solution = new LinkedList<>();
 
     public SearchWorkerDFS(Vertex startNode,
                            List<Vertex> vertices,
@@ -16,9 +18,24 @@ class SearchWorkerDFS extends AbstractSearchWorker {
     }
 
     @Override
-    protected List<Vertex> doInBackground() {
+    protected String doInBackground() {
         dfs(startNode);
-        return solution;
+        return getSolutionString();
+    }
+
+    @Override
+    public String getSolutionString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(algorithm.toString()).append(" : ");
+        Iterator<Vertex> iterator = solution.iterator();
+        while (iterator.hasNext()) {
+            sb.append(iterator.next().getVertexId());
+            if (iterator.hasNext()) {
+                sb.append(" -> ");
+            }
+        }
+        return sb.toString();
+
     }
 
     private void dfs(Vertex node) {
