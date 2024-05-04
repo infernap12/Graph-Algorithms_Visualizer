@@ -3,7 +3,8 @@ package visualizer;
 public enum Algorithm {
     DFS("Depth-First Search"),
     BFS("Breadth-First Search"),
-    DIJKSTRA("Dijkstra's Algorithm");
+    DIJKSTRA("Dijkstra's Algorithm"),
+    PRIM("Prim's Algorithm");
 
     private final String algorithmName;
 
